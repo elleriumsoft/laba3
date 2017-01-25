@@ -16,7 +16,7 @@ public class TestServ extends HttpServlet
 
         PrintWriter pw = resp.getWriter();
         pw.println("<H1><b>Собственно это тест</b></H1>");
-        pw.println("<a href=\"/PrintDate\">Здесь 2я страница с выводом даты</a>");
+        pw.println("<a href=\"/laba3/PrintDate\">Здесь 2я страница с выводом даты</a>");
         pw.flush();
     }
 }
