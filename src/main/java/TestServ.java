@@ -15,7 +15,7 @@ public class TestServ extends HttpServlet
         resp.setContentType("text/html;charset=utf-8");
 
         PrintWriter pw = resp.getWriter();
-        pw.println("<H1><b>Ура заработало</b></H1>");
+        pw.println("<H1><b>работало</b></H1>");
         pw.flush();
     }
 }
