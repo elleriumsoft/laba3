@@ -18,6 +18,7 @@ public class TestServ extends HttpServlet
         pw.println("<H1><b>Собственно это текст</b></H1>");
         pw.println("<H2><a href=\"/laba3/PrintDate\">Здесь 2я страница с выводом даты</a>" + "<br></H2>");
         pw.println("<H2><a href=\"/laba3/PrintStructure\">Структура мэрии</a></H2>");
+        pw.println("<H2><a href=\"/laba3/TestDb\">Тест обращения к базе данных</a></H2>");
         pw.close();
     }
 }

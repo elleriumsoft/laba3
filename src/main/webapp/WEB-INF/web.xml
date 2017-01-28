@@ -4,15 +4,4 @@
 
 <web-app>
   <display-name>laba3</display-name>
-
-  <servlet>
-    <servlet-name>DateServlet</servlet-name>
-    <servlet-class>PrintDate</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>DateServlet</servlet-name>
-    <url-pattern>/PrintDate</url-pattern>
-  </servlet-mapping>
-
 </web-app>
