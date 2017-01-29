@@ -47,22 +47,24 @@ public class Structure
 
     public static String printStructure()
     {
+        int level = 1;
         int parentId = 0;
-        String indent = "";
-        StringBuilder outString = new StringBuilder();
-        printElement(parentId, indent, outString);
+        StringBuilder outString = new StringBuilder("<div id=\"multi-derevo\"><ul>");
+        printElement(level, parentId, outString);
         return outString.toString();
     }
 
-    private static void printElement(int parentId, String indent, StringBuilder pw)
+    private static void printElement(int level, int parentId, StringBuilder pw)
     {
         for (int i = 0; i < Structure.getStructure().size(); i++)
         {
+            pw.append("<ul>");
             if (Structure.getStructure().get(i).getParent_id() == parentId)
             {
-                pw.append(indent + Structure.getStructure().get(i).getName() + "<br>");
-                printElement(Structure.getStructure().get(i).getId(), indent + "--", pw);
+                pw.append("<li><span>"  + Structure.getStructure().get(i).getName() + "</span></li><br>");
+                printElement(level+1, Structure.getStructure().get(i).getId(), pw);
             }
+            pw.append("</ul>");
         }
     }
 }

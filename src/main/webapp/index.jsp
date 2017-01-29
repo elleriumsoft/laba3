@@ -12,6 +12,7 @@
 <body>
     <H2><a href="/laba3/Servlets.PrintStructure2">Структура мэрии локальная</a></H2>
     <H2><a href="/laba3/Servlets.PrintStructure">Структура мэрии из БД</a></H2>
+    <H2><a href="/laba3/PrintStructureJsp.jsp">Структура мэрии из БД JSP</a></H2>
     <H2><a href="/laba3/Servlets.TestDb">Тест обращения к базе данных</a></H2>
 </body>
 </html>

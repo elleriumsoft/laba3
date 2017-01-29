@@ -1,0 +1,41 @@
+/* общий стиль */
+body {font-family: Arial, Tahoma, sans-serif; margin: 2em; font-size: 62.5%;}
+p {
+    font-size: 1.2em;
+}
+a {
+    color: #0066cc;
+    text-decoration: none;
+    outline: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:active, a:focus {
+    color: #666;
+    background-color: #f4f4f4;
+}
+a.current {
+    color: black;
+    font-weight: bold;
+    background-color: #f4f4f4;
+}
+
+/* Дерево многоуровневое
+-------------------------------- */
+#multi-derevo {
+    width: 620px; /* блок под дерево */
+    border: solid; /* границы блока */
+    border-color: silver gray gray silver;
+    border-width: 2px;
+    padding: 0 0 1em 0; /* нижний отступ */
+    font-size: 1.3em;
+}
+span { /* обертка пункта */
+    text-decoration: none;
+    display: block; /* растянем до правого края блока */
+    margin: 0 0 0 1.2em;
+    background-color: transparent;
+    border: solid silver; /* цвет линий */
+    border-width: 0 0 1px 1px; /* границы: низ и лево */
+}
