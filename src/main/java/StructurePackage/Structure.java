@@ -1,5 +1,7 @@
 package StructurePackage;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -20,6 +22,15 @@ public class Structure
         addElement(40, "Административный отдел", 14);
     }
 
+    public static void initStructureFromDb(ResultSet rs) throws SQLException
+    {
+        structure = new ArrayList<>();
+        while (rs.next())
+        {
+            addElement(rs.getInt("id"), rs.getString("dept"), rs.getInt("parent_id"));
+        }
+    }
+
     public static void addElement(int id, String name, int parent_id)
     {
         StructureElement element = new StructureElement();
@@ -32,5 +43,26 @@ public class Structure
     public static ArrayList<StructureElement> getStructure()
     {
         return structure;
+    }
+
+    public static String printStructure()
+    {
+        int parentId = 0;
+        String indent = "";
+        StringBuilder outString = new StringBuilder();
+        printElement(parentId, indent, outString);
+        return outString.toString();
+    }
+
+    private static void printElement(int parentId, String indent, StringBuilder pw)
+    {
+        for (int i = 0; i < Structure.getStructure().size(); i++)
+        {
+            if (Structure.getStructure().get(i).getParent_id() == parentId)
+            {
+                pw.append(indent + Structure.getStructure().get(i).getName() + "<br>");
+                printElement(Structure.getStructure().get(i).getId(), indent + "--", pw);
+            }
+        }
     }
 }
