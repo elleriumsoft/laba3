@@ -27,7 +27,7 @@ public class PrintStructure2 extends HttpServlet
 
         pw.println("<H1><b>Структура мэрии</b></H1>");
         pw.println("<body>");
-        pw.println(Structure.printStructure());
+        pw.println(Structure.printStructure(""));
         pw.println("</body>");
         pw.close();
     }

@@ -45,26 +45,51 @@ public class Structure
         return structure;
     }
 
-    public static String printStructure()
+    public static String printStructure(String command)
     {
         int level = 1;
         int parentId = 0;
         StringBuilder outString = new StringBuilder("<div id=\"multi-derevo\"><ul>");
-        printElement(level, parentId, outString);
+        printElement(level, parentId, outString, command);
         return outString.toString();
     }
 
-    private static void printElement(int level, int parentId, StringBuilder pw)
+    private static void printElement(int level, int parentId, StringBuilder pw, String command)
     {
         for (int i = 0; i < Structure.getStructure().size(); i++)
         {
             pw.append("<ul>");
             if (Structure.getStructure().get(i).getParent_id() == parentId)
             {
-                pw.append("<li><span>"  + Structure.getStructure().get(i).getName() + "</span></li><br>");
-                printElement(level+1, Structure.getStructure().get(i).getId(), pw);
+                pw.append("<li><span>" + Structure.getStructure().get(i).getName() + "&nbsp");
+                if (!command.equals(""))
+                {
+                    pw.append("<a href=\"/laba3/Servlets.PrintStructure?command=" + command + "&element=" + Structure.getStructure().get(i).getId() + "\">["+ getStringCommand(command) + "]</a>");
+                }
+                pw.append( "</span></li>" + "<br>");
+                printElement(level+1, Structure.getStructure().get(i).getId(), pw, command);
             }
             pw.append("</ul>");
+        }
+    }
+
+    private static String getStringCommand(String command)
+    {
+        if (command.equals("add"))
+        {
+            return "Добавить";
+        }
+        else if (command.equals("edit"))
+        {
+            return "Редактировать";
+        }
+        else if (command.equals("delete"))
+        {
+            return "Удалить";
+        }
+        else
+        {
+            return "";
         }
     }
 }

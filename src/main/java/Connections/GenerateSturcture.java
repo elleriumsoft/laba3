@@ -11,11 +11,17 @@ import java.sql.SQLException;
  */
 public class GenerateSturcture implements GenerateBody
 {
+    private String command;
+    public GenerateSturcture(String command)
+    {
+        this.command = command;
+    }
+
     @Override
     public String doBody(Connection connection) throws SQLException
     {
         ResultSet rs = connection.createStatement().executeQuery("select * from structure;\n");
         Structure.initStructureFromDb(rs);
-        return Structure.printStructure();
+        return Structure.printStructure(command);
     }
 }

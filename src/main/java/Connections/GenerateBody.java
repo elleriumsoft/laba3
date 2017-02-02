@@ -8,5 +8,5 @@ import java.sql.SQLException;
  */
 public interface GenerateBody
 {
-    public String doBody(Connection connection) throws SQLException;
+    String doBody(Connection connection) throws SQLException;
 }
