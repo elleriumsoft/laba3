@@ -45,6 +45,18 @@ public class Structure
         return structure;
     }
 
+    public static String getDeptName(int id)
+    {
+        for (StructureElement element: structure)
+        {
+            if (element.getId() == id)
+            {
+                return element.getName();
+            }
+        }
+        return "";
+    }
+
     public static String printStructure(String command)
     {
         int level = 1;

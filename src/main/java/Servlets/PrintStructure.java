@@ -1,7 +1,9 @@
 package Servlets;
 
 import Connections.ConnectionToDb;
+import Connections.DeleteElement;
 import Connections.GenerateSturcture;
+import StructurePackage.Structure;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,22 +20,22 @@ import java.io.PrintWriter;
 @WebServlet("/Servlets.PrintStructure")
 public class PrintStructure extends HttpServlet
 {
+    private String command;
+    private int idForAction;
+
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        String command = "";
-        if (req.getParameterNames().hasMoreElements())
-        {
-            command = req.getParameter("command");
-        }
+        fillVarFromRequest(req);
 
         resp.setContentType("text/html;charset=utf-8");
         PrintWriter pw = resp.getWriter();
 
        pw.println("<head>");
-       pw.println("<title>Структура мэрии</title>");
+       pw.println("<title>>Структура мэрии</title>");
        pw.println("</head>");
 
-        pw.println("<H1><b>Структура мэрии</b></H1>");
+       pw.println("<h1 style=\"color:#191970\"");
+        pw.println("<h1><b>Структура мэрии</b></h1>");
         pw.println("<body>");
 
         if (command.equals(""))
@@ -42,13 +44,33 @@ public class PrintStructure extends HttpServlet
         }
         else
         {
-            printButtonsForCommand(pw, command);
+            printButtonsForCommand(pw, command, req, resp);
         }
         pw.println("<br>");
 
         pw.print(new ConnectionToDb().writeBody(new GenerateSturcture(command)));
         pw.println("</body>");
         pw.close();
+    }
+
+    private void fillVarFromRequest(HttpServletRequest req)
+    {
+        if (req.getParameterNames().hasMoreElements())
+        {
+            command = req.getParameter("command");
+        }
+        else
+        {
+            command = "";
+        }
+        if (req.getParameterNames().hasMoreElements() && req.getParameter("element") != null)
+        {
+            idForAction = Integer.valueOf(req.getParameter("element"));
+        }
+        else
+        {
+            idForAction = -1;
+        }
     }
 
     private void printButtons(PrintWriter pw)
@@ -58,8 +80,50 @@ public class PrintStructure extends HttpServlet
         pw.println("<input type=\"submit\" id=\"Button3\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure?command=delete';return false;\" name=\"\" value=\"Удалить\" style=\"position:absolute;left:235px;top:51px;width:104px;height:25px;z-index:2;\">");
     }
 
-    private void printButtonsForCommand(PrintWriter pw, String command)
+    private void printButtonsForCommand(PrintWriter pw, String command, HttpServletRequest request, HttpServletResponse response)
     {
-        pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"Отмена\" style=\"position:absolute;left:9px;top:51px;width:104px;height:25px;z-index:0;\">");
+        if (idForAction != -1)
+        {
+            if (command.equals("add"))
+            {
+                request.getSession().setAttribute("idforaction", String.valueOf(idForAction));
+                pw.println("Добавьте элемент в " + Structure.getDeptName(idForAction) + ":<br>");
+                pw.println("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.ForEditBoxes\">");
+                pw.println("<input type=\"text\" id=\"Editbox1\" style=\"position:absolute;line-\" name=\"EditAdd\" value=\"\"  maxlength=\"200\">");
+                pw.println("<input type=\"submit\" id=\"Button1\" \" name=\"\" value=\"ОК\" style=\"position:absolute;left:240px;top:83px;width:104px;height:23px;z-index:0;\">");//pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"ОК\" style=\"position:absolute;left:270px;top:83px;width:104px;height:23px;z-index:0;\">");
+                pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"Отмена\" style=\"position:absolute;left:350px;top:83px;width:104px;height:23px;z-index:0;\">");
+                pw.println("</form>");
+            }
+            if (command.equals("edit"))
+            {
+                request.getSession().setAttribute("idforaction", String.valueOf(idForAction));
+                pw.println("Новое название для " + Structure.getDeptName(idForAction) + ":<br>");
+                pw.println("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.ForEditBoxes\">");
+                pw.println("<input type=\"text\" id=\"Editbox1\" style=\"position:absolute;line-\" name=\"EditEdit\" value=\"\"  maxlength=\"200\">");
+                pw.println("<input type=\"submit\" id=\"Button1\" \" name=\"\" value=\"ОК\" style=\"position:absolute;left:240px;top:83px;width:104px;height:23px;z-index:0;\">");
+                pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"Отмена\" style=\"position:absolute;left:350px;top:83px;width:104px;height:23px;z-index:0;\">");
+                pw.println("</form>");
+            }
+            if (command.equals("delete"))
+            {
+                new ConnectionToDb().writeBody(new DeleteElement(idForAction));
+                returnToStartPage(response);
+            }
+        }
+        else
+        {
+            pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"Отмена\" style=\"position:absolute;left:9px;top:51px;width:104px;height:25px;z-index:0;\">");
+        }
+    }
+
+    private void returnToStartPage(HttpServletResponse response)
+    {
+        try
+        {
+            response.sendRedirect("/laba3/Servlets.PrintStructure");
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
