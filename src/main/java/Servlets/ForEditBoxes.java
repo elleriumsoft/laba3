@@ -36,17 +36,7 @@ public class ForEditBoxes extends HttpServlet
                 new ConnectionToDb().writeBody(new EditElement(req.getParameter("EditEdit"), idForAction));
             }
         }
-        returnToStartPage(resp);
+        resp.sendRedirect("/laba3/Servlets.PrintStructure");
     }
 
-    private void returnToStartPage(HttpServletResponse response)
-    {
-        try
-        {
-            response.sendRedirect("/laba3/Servlets.PrintStructure");
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

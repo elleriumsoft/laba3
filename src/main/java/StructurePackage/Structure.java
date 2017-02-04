@@ -68,18 +68,20 @@ public class Structure
 
     private static void printElement(int level, int parentId, StringBuilder pw, String command)
     {
+        StructureElement el;
         for (int i = 0; i < Structure.getStructure().size(); i++)
         {
+            el = Structure.getStructure().get(i);
             pw.append("<ul>");
-            if (Structure.getStructure().get(i).getParent_id() == parentId)
+            if (el.getParent_id() == parentId)
             {
-                pw.append("<li><span>" + Structure.getStructure().get(i).getName() + "&nbsp");
+                pw.append("<li><span><a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(el.getId()) + "\">" + el.getName() + "</a>&nbsp");
                 if (!command.equals(""))
                 {
-                    pw.append("<a href=\"/laba3/Servlets.PrintStructure?command=" + command + "&element=" + Structure.getStructure().get(i).getId() + "\">["+ getStringCommand(command) + "]</a>");
+                    pw.append("<a href=\"/laba3/Servlets.PrintStructure?command=" + command + "&element=" + el.getId() + "\">["+ getStringCommand(command) + "]</a>");
                 }
                 pw.append( "</span></li>" + "<br>");
-                printElement(level+1, Structure.getStructure().get(i).getId(), pw, command);
+                printElement(level+1, el.getId(), pw, command);
             }
             pw.append("</ul>");
         }

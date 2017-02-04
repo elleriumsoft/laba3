@@ -80,7 +80,7 @@ public class PrintStructure extends HttpServlet
         pw.println("<input type=\"submit\" id=\"Button3\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure?command=delete';return false;\" name=\"\" value=\"Удалить\" style=\"position:absolute;left:235px;top:51px;width:104px;height:25px;z-index:2;\">");
     }
 
-    private void printButtonsForCommand(PrintWriter pw, String command, HttpServletRequest request, HttpServletResponse response)
+    private void printButtonsForCommand(PrintWriter pw, String command, HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         if (idForAction != -1)
         {
@@ -116,14 +116,8 @@ public class PrintStructure extends HttpServlet
         }
     }
 
-    private void returnToStartPage(HttpServletResponse response)
+    private void returnToStartPage(HttpServletResponse response) throws IOException
     {
-        try
-        {
-            response.sendRedirect("/laba3/Servlets.PrintStructure");
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        response.sendRedirect("/laba3/Servlets.PrintStructure");
     }
 }
