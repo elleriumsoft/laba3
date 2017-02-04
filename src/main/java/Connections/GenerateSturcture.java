@@ -1,6 +1,6 @@
 package Connections;
 
-import StructurePackage.Structure;
+import Data.Structure;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

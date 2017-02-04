@@ -1,4 +1,4 @@
-package StructurePackage;
+package Data;
 
 /**
  * Created by Dmitriy on 26.01.2017.

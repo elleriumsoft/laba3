@@ -1,4 +1,4 @@
-package StructurePackage;
+package Data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -78,7 +78,7 @@ public class Structure
                 pw.append("<li><span><a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(el.getId()) + "\">" + el.getName() + "</a>&nbsp");
                 if (!command.equals(""))
                 {
-                    pw.append("<a href=\"/laba3/Servlets.PrintStructure?command=" + command + "&element=" + el.getId() + "\">["+ getStringCommand(command) + "]</a>");
+                    pw.append("<a href=\"/laba3/Servlets.PrintStructure?command=" + command + "&element=" + el.getId() + "\"style=\"color:#FF0000\">["+ getStringCommand(command) + "]</a>");
                 }
                 pw.append( "</span></li>" + "<br>");
                 printElement(level+1, el.getId(), pw, command);
