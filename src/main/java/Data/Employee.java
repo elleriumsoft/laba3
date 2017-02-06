@@ -10,18 +10,25 @@ import java.util.ArrayList;
 public class Employee
 {
     private static ArrayList<EmployeeElement> employee;
+    private static ArrayList<OccupationElement> occ;
 
-    public static void initEmployee(ResultSet rs) throws SQLException
+    public static void initEmployee(ResultSet employee, ResultSet occ) throws SQLException
     {
-        employee = new ArrayList<>();
-        while (rs.next())
+        Employee.employee = new ArrayList<>();
+        while (employee.next())
         {
             EmployeeElement el = new EmployeeElement();
-            el.setId(rs.getInt("id"));
-            el.setName(rs.getString("name"));
-            el.setDate(rs.getString("date"));
-            el.setOccupation(rs.getString("occ"));
-            employee.add(el);
+            el.setId(employee.getInt("id"));
+            el.setName(employee.getString("name"));
+            el.setDate(employee.getString("date"));
+            el.setOccupation(employee.getString("occ"));
+            Employee.employee.add(el);
+        }
+
+        Employee.occ = new ArrayList<>();
+        while (occ.next())
+        {
+            Employee.occ.add(new OccupationElement(occ.getInt("id"), occ.getString("occupation")));
         }
     }
 
@@ -29,9 +36,13 @@ public class Employee
     {
         StringBuilder result = new StringBuilder("<table border>");
         result.append("<th>Фамилия Имя Отчество</th><th>Дата рождения</th><th>Должность</th>");
-
+        if (command.equals("add"))
+        {
+            result.append(addEditFields(0));
+        }
         for (EmployeeElement element : employee)
         {
+
             result.append("<tr>");
 
             result.append("<td>");
@@ -46,18 +57,37 @@ public class Employee
             result.append(element.getOccupation());
             result.append("</td>");
 
-            if (!command.equals(""))
+            if (!command.equals("") && !(command.equals("add")))
             {
-                result.append("<td>");
-                result.append("<a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement) + "&command=" + command + "&idemployee=" + element.getId() + "\"style=\"color:#FF0000\">" + getRussianCommand(command) + "</a>");
-
-                result.append("</td>");
+                result.append("<td><a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement) + "&command=" + command + "&idemployee=" + element.getId() + "\"style=\"color:#FF0000\">" + getRussianCommand(command) + "</a></td>");
             }
 
             result.append("</tr>");
         }
         result.append("</table>");
         return result.toString();
+    }
+
+    private static StringBuilder addEditFields(int line)
+    {
+        StringBuilder editFields = new StringBuilder("<tr>");
+        editFields.append("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.EditBoxesForStructure\">");
+        editFields.append("<td><input type=\"text\" id=\"Editbox1\" name=\"AddNameLine\" value=\"\"  maxlength=\"125\"></td>");
+        editFields.append("<td><input type=\"text\" id=\"Editbox2\" name=\"AddDateLine\" value=\"\"  maxlength=\"10\"></td>");
+//        editFields.append("<td><input type=\"text\" id=\"Editbox3\" name=\"AddOccLine\" value=\"\"  maxlength=\"2\"></td>");
+        editFields.append("<td>");
+        editFields.append("<select size=\"2\" required size = \"1\" multiple name=\"occ\">");
+        editFields.append("<option disabled>Выберите должность</option>");
+
+        for (OccupationElement occElement: occ)
+        {
+           editFields.append("<option value=\"" + occElement.getId() + "\">" + occElement.getName() + "</option>");
+        }
+        editFields.append("</select>");
+        editFields.append("</td>");
+        editFields.append("<td><input type=\"submit\" id=\"Button1\" name=\"\" value=\"Добавить\"></td>");
+        editFields.append("</form></tr>");
+        return editFields;
     }
 
     private static String getRussianCommand(String command)

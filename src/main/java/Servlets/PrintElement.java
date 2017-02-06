@@ -65,6 +65,10 @@ public class PrintElement extends HttpServlet
             if (req.getParameter("command") != null)
             {
                 command = req.getParameter("command");
+                if (command.equals("add"))
+                {
+                    req.getSession().setAttribute("idforaction2", String.valueOf(-1));
+                }
             }
             else
             {

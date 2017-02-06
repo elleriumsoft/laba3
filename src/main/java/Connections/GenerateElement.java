@@ -24,8 +24,9 @@ public class GenerateElement implements GenerateBody
     public String doBody(Connection connection) throws SQLException
     {
         String result = "";
-        ResultSet rs = connection.createStatement().executeQuery("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ from employee, occupations WHERE employee.id_occ = occupations.id  and employee.id_dept=" + String.valueOf(id) + ";\n");
-            Employee.initEmployee(rs);
+        ResultSet emp = connection.createStatement().executeQuery("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ from employee, occupations WHERE employee.id_occ = occupations.id  and employee.id_dept=" + String.valueOf(id) + ";\n");
+        ResultSet occ = connection.createStatement().executeQuery("select * from occupations" + ";\n");
+            Employee.initEmployee(emp, occ);
             result = Employee.printEmployee(command, id);
         return result;
     }

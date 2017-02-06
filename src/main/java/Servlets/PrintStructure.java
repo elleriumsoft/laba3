@@ -88,7 +88,7 @@ public class PrintStructure extends HttpServlet
             {
                 request.getSession().setAttribute("idforaction", String.valueOf(idForAction));
                 pw.println("Добавьте элемент в " + Structure.getDeptName(idForAction) + ":<br>");
-                pw.println("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.ForEditBoxes\">");
+                pw.println("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.EditBoxesForStructure\">");
                 pw.println("<input type=\"text\" id=\"Editbox1\" style=\"position:absolute;line-\" name=\"EditAdd\" value=\"\"  maxlength=\"200\">");
                 pw.println("<input type=\"submit\" id=\"Button1\" \" name=\"\" value=\"ОК\" style=\"position:absolute;left:240px;top:83px;width:104px;height:23px;z-index:0;\">");//pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"ОК\" style=\"position:absolute;left:270px;top:83px;width:104px;height:23px;z-index:0;\">");
                 pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"Отмена\" style=\"position:absolute;left:350px;top:83px;width:104px;height:23px;z-index:0;\">");
@@ -98,7 +98,7 @@ public class PrintStructure extends HttpServlet
             {
                 request.getSession().setAttribute("idforaction", String.valueOf(idForAction));
                 pw.println("Новое название для " + Structure.getDeptName(idForAction) + ":<br>");
-                pw.println("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.ForEditBoxes\">");
+                pw.println("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.EditBoxesForStructure\">");
                 pw.println("<input type=\"text\" id=\"Editbox1\" style=\"position:absolute;line-\" name=\"EditEdit\" value=\"\"  maxlength=\"200\">");
                 pw.println("<input type=\"submit\" id=\"Button1\" \" name=\"\" value=\"ОК\" style=\"position:absolute;left:240px;top:83px;width:104px;height:23px;z-index:0;\">");
                 pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"Отмена\" style=\"position:absolute;left:350px;top:83px;width:104px;height:23px;z-index:0;\">");
