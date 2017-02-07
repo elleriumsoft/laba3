@@ -13,11 +13,13 @@ public class GenerateElement implements GenerateBody
 {
     private String command;
     private int id;
+    private int idEmp;
 
-    public GenerateElement(String command, int id)
+    public GenerateElement(String command, int id, int idEmp)
     {
         this.command = command;
         this.id = id;
+        this.idEmp = idEmp;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class GenerateElement implements GenerateBody
         ResultSet emp = connection.createStatement().executeQuery("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ from employee, occupations WHERE employee.id_occ = occupations.id  and employee.id_dept=" + String.valueOf(id) + ";\n");
         ResultSet occ = connection.createStatement().executeQuery("select * from occupations" + ";\n");
             Employee.initEmployee(emp, occ);
-            result = Employee.printEmployee(command, id);
+            result = Employee.printEmployee(command, id, idEmp);
         return result;
     }
 }

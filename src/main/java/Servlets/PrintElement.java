@@ -21,6 +21,7 @@ public class PrintElement extends HttpServlet
 {
     private String nameElement = "";
     private int idElement = -1;
+    private int idEmployee = -1;
     private String command = "";
 
     @Override
@@ -48,7 +49,7 @@ public class PrintElement extends HttpServlet
         printButtons(pw);
         pw.println("<br>");
 
-        pw.print(new ConnectionToDb().writeBody(new GenerateElement(command, idElement)));
+        pw.print(new ConnectionToDb().writeBody(new GenerateElement(command, idElement, idEmployee)));
         pw.println("</body>");
     }
 
@@ -62,13 +63,16 @@ public class PrintElement extends HttpServlet
         if (req.getParameterNames().hasMoreElements())
         {
             idElement = Integer.valueOf(req.getParameter("id"));
+            idEmployee = -1;
             if (req.getParameter("command") != null)
             {
                 command = req.getParameter("command");
-                if (command.equals("add"))
+                if (req.getParameter("idemployee") != null)
                 {
-                    req.getSession().setAttribute("idforaction2", String.valueOf(-1));
+                    idEmployee = Integer.valueOf(req.getParameter("idemployee"));
                 }
+                req.getSession().setAttribute("idforaction2", String.valueOf(idEmployee));
+                req.getSession().setAttribute("iddept", String.valueOf(idElement));
             }
             else
             {

@@ -32,34 +32,40 @@ public class Employee
         }
     }
 
-    public static String printEmployee(String command, int idElement)
+    public static String printEmployee(String command, int idElement, int idEmp)
     {
         StringBuilder result = new StringBuilder("<table border>");
         result.append("<th>Фамилия Имя Отчество</th><th>Дата рождения</th><th>Должность</th>");
         if (command.equals("add"))
         {
-            result.append(addEditFields(0));
+            result.append(addEditFields(null, idEmp));
         }
         for (EmployeeElement element : employee)
         {
-
-            result.append("<tr>");
-
-            result.append("<td>");
-            result.append(element.getName());
-            result.append("</td>");
-
-            result.append("<td>");
-            result.append(element.getDate());
-            result.append("</td>");
-
-            result.append("<td>");
-            result.append(element.getOccupation());
-            result.append("</td>");
-
-            if (!command.equals("") && !(command.equals("add")))
+            if (idEmp == element.getId())
             {
-                result.append("<td><a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement) + "&command=" + command + "&idemployee=" + element.getId() + "\"style=\"color:#FF0000\">" + getRussianCommand(command) + "</a></td>");
+                result.append(addEditFields(element, idEmp));
+            }
+            else
+            {
+                result.append("<tr>");
+
+                result.append("<td>");
+                result.append(element.getName());
+                result.append("</td>");
+
+                result.append("<td>");
+                result.append(element.getBeautifulDate());
+                result.append("</td>");
+
+                result.append("<td>");
+                result.append(element.getOccupation());
+                result.append("</td>");
+
+                if (!command.equals("") && !(command.equals("add")))
+                {
+                    result.append("<td><a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement) + "&command=" + command + "&idemployee=" + element.getId() + "\"style=\"color:#FF0000\">" + getRussianCommand(command) + "</a></td>");
+                }
             }
 
             result.append("</tr>");
@@ -68,24 +74,39 @@ public class Employee
         return result.toString();
     }
 
-    private static StringBuilder addEditFields(int line)
+    private static StringBuilder addEditFields(EmployeeElement element, int idEmp)
     {
         StringBuilder editFields = new StringBuilder("<tr>");
-        editFields.append("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.EditBoxesForStructure\">");
-        editFields.append("<td><input type=\"text\" id=\"Editbox1\" name=\"AddNameLine\" value=\"\"  maxlength=\"125\"></td>");
-        editFields.append("<td><input type=\"text\" id=\"Editbox2\" name=\"AddDateLine\" value=\"\"  maxlength=\"10\"></td>");
-//        editFields.append("<td><input type=\"text\" id=\"Editbox3\" name=\"AddOccLine\" value=\"\"  maxlength=\"2\"></td>");
+        editFields.append("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.EditBoxesForElement\">");
+        if (idEmp == -1)
+        {
+            editFields.append("<td><input type=\"text\" id=\"Editbox1\" name=\"AddNameLine\" value=\"\"  maxlength=\"125\"></td>");
+            editFields.append("<td><input type=\"date\" id=\"Editbox2\" placeholder=\"1980-05-30\" name=\"AddDateLine\" value=\"\"  maxlength=\"10\"></td>");
+        } else
+        {
+            editFields.append("<td><input type=\"text\" id=\"Editbox1\" value=\"" + element.getName() + "\" name=\"AddNameLine\" value=\"\"  maxlength=\"125\"></td>");
+            editFields.append("<td><input type=\"date\" id=\"Editbox2\" value=\"" + element.getDate() + "\" name=\"AddDateLine\" value=\"\"  maxlength=\"10\"></td>");
+        }
+
         editFields.append("<td>");
         editFields.append("<select size=\"2\" required size = \"1\" multiple name=\"occ\">");
         editFields.append("<option disabled>Выберите должность</option>");
 
-        for (OccupationElement occElement: occ)
+        for (OccupationElement occElement : occ)
         {
-           editFields.append("<option value=\"" + occElement.getId() + "\">" + occElement.getName() + "</option>");
+            editFields.append("<option value=\"" + occElement.getId() + "\">" + occElement.getName() + "</option>");
         }
         editFields.append("</select>");
         editFields.append("</td>");
-        editFields.append("<td><input type=\"submit\" id=\"Button1\" name=\"\" value=\"Добавить\"></td>");
+
+        if (idEmp == -1)
+        {
+            editFields.append("<td><input type=\"submit\" id=\"Button1\" name=\"\" value=\"Добавить\"></td>");
+        }
+        else
+        {
+            editFields.append("<td><input type=\"submit\" id=\"Button1\" name=\"\" value=\"Отредактировать\"></td>");
+        }
         editFields.append("</form></tr>");
         return editFields;
     }
