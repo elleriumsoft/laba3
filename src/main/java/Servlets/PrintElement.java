@@ -1,7 +1,8 @@
 package Servlets;
 
 import Connections.ConnectionToDb;
-import Connections.GenerateElement;
+import Connections.Employee.DeleteEmployee;
+import Connections.Employee.GenerateElement;
 import Data.Structure;
 
 import javax.servlet.ServletException;
@@ -81,6 +82,11 @@ public class PrintElement extends HttpServlet
         } else
         {
             resp.sendRedirect("/laba3/Servlets.PrintStructure");
+        }
+        if (command.equals("delete") && idEmployee != -1)
+        {
+            new ConnectionToDb().writeBody(new DeleteEmployee(idEmployee));
+            resp.sendRedirect("/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement));
         }
     }
 

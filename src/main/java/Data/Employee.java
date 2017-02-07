@@ -89,7 +89,7 @@ public class Employee
         }
 
         editFields.append("<td>");
-        editFields.append("<select size=\"2\" required size = \"1\" multiple name=\"occ\">");
+        editFields.append("<select size=\"2\" required size = \"1\" name=\"occ\">");
         editFields.append("<option disabled>Выберите должность</option>");
 
         for (OccupationElement occElement : occ)
@@ -131,5 +131,33 @@ public class Employee
     public static ArrayList<EmployeeElement> getEmployee()
     {
         return employee;
+    }
+
+    public static String printFindedEmployee()
+    {
+        StringBuilder result = new StringBuilder("<table border>");
+        result.append("<th>Фамилия Имя Отчество</th><th>Дата рождения</th><th>Должность</th>");
+        for (EmployeeElement element : employee)
+        {
+            System.out.println(element.getName());
+            result.append("<tr>");
+
+            result.append("<td>");
+            result.append(element.getName());
+            result.append("</td>");
+
+            result.append("<td>");
+            result.append(element.getBeautifulDate());
+            result.append("</td>");
+
+            result.append("<td>");
+            result.append(element.getOccupation());
+            result.append("</td>");
+
+
+            result.append("</tr>");
+        }
+        result.append("</table>");
+        return result.toString();
     }
 }

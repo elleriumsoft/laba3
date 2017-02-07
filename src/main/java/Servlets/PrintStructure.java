@@ -1,8 +1,8 @@
 package Servlets;
 
 import Connections.ConnectionToDb;
-import Connections.DeleteElement;
-import Connections.GenerateSturcture;
+import Connections.Structure.DeleteElement;
+import Connections.Structure.GenerateSturcture;
 import Data.Structure;
 
 import javax.servlet.ServletException;
@@ -47,6 +47,7 @@ public class PrintStructure extends HttpServlet
             printButtonsForCommand(pw, command, req, resp);
         }
         pw.println("<br>");
+        pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/index.jsp';return false;\" name=\"\" value=\"Вернуться в меню\" style=\"position:absolute;left:310px;top:18px;width:184px;height:25px;\">");
 
         pw.print(new ConnectionToDb().writeBody(new GenerateSturcture(command)));
         pw.println("</body>");

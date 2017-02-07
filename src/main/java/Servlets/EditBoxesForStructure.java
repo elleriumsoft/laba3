@@ -1,8 +1,8 @@
 package Servlets;
 
-import Connections.AddElement;
+import Connections.Structure.AddElement;
 import Connections.ConnectionToDb;
-import Connections.EditElement;
+import Connections.Structure.EditElement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

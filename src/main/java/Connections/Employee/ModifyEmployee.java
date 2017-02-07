@@ -1,4 +1,6 @@
-package Connections;
+package Connections.Employee;
+
+import Connections.GenerateBody;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -1,6 +1,6 @@
 package Servlets;
 
-import Connections.ModifyEmployee;
+import Connections.Employee.ModifyEmployee;
 import Connections.ConnectionToDb;
 
 import javax.servlet.ServletException;

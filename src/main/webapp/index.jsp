@@ -10,8 +10,8 @@
 <link rel="stylesheet" type="text/css" href="/css/screen.css" />
 <head>
 <body>
-<!--    <H2><a href="/laba3/Servlets.PrintStructure">Структура мэрии из БД</a></H2> -->
-    <H2><a href="/laba3/Servlets.PrintStructure">Структура мэрии из БД JSP</a></H2>
-    <!--    <H2><a href="/laba3/Servlets.TestDb">Тест обращения к базе данных</a></H2> -->
+    <H1>Лабораторная работа №3</H1>
+    <H2><a href="/laba3/Servlets.PrintStructure">Структура мэрии</a></H2>
+    <H2><a href="/laba3/Servlets.Finder">Поиск сотрудника в мэрии</a></H2>
 </body>
 </html>

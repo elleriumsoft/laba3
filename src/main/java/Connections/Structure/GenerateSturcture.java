@@ -1,5 +1,6 @@
-package Connections;
+package Connections.Structure;
 
+import Connections.GenerateBody;
 import Data.Structure;
 
 import java.sql.Connection;
