@@ -1,7 +1,12 @@
 package Servlets;
 
 import Connections.ConnectionToDb;
+import Connections.Employee.GenerateElement;
+import Connections.Finder.FindByDate;
 import Connections.Finder.FindByName;
+import Connections.Finder.FindByOccupation;
+import Data.Employee;
+import Data.OccupationElement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,21 +70,52 @@ public class Finder extends HttpServlet
 
     private void printInputForFind()
     {
-        pw.println("<br><form name=\"find\" method=\"get\" action=\"/laba3/Servlets.Finder\">");
+        pw.println("<br><form name=\"Find\" method=\"get\" action=\"/laba3/Servlets.Finder\">");
         switch (selectFinder)
         {
             case 1:
-                pw.println("<b>Введите имя полнстью или его часть</b>");
+                pw.println("<b>Введите имя полностью или его часть</b><br>");
                 pw.println("<td><input type=\"text\" id=\"Editbox1\" name=\"FindName\" value=\"\"  maxlength=\"125\"></td>");
                 break;
             case 2:
-                pw.println("<td><input type=\"text\" id=\"Editbox1\" name=\"FindOcc\" value=\"\"  maxlength=\"2\"></td>");
+                pw.println("<b>Выберите должность для поиска</b><br>");
+                new ConnectionToDb().writeBody(new GenerateElement("", 0, 0));
+                pw.println(generateSelectOccupations());
+                pw.println("<br><br>");
+                break;
             case 3:
-                pw.println("<td><input type=\"text\" id=\"Editbox1\" name=\"FindDate\" value=\"\"  maxlength=\"10\"></td>");
+                pw.println("<b>Выберите интервал дат для поиска</b><br>");
+                pw.println(generateSelectDates());
+                pw.println("<br><br>");
         }
-        pw.println("<td><input type=\"submit\" id=\"Button1\" name=\"\" value=\"Поиск\"></td>");
+        pw.println("<td><input type=\"submit\" id=\"Button1\" name=\"\" value=\"Начать поиск\"></td>");
         pw.println("</form>");
 
+    }
+
+    private String generateSelectDates()
+    {
+        StringBuilder forSelect = new StringBuilder();
+        forSelect.append("<td><input type=\"date\" id=\"Editbox2\" name=\"FirstDate\" value=\"\"  maxlength=\"10\"></td>");
+        forSelect.append(" - ");
+        forSelect.append("<td><input type=\"date\" id=\"Editbox2\" name=\"SecondDate\" value=\"\"  maxlength=\"10\"></td>");
+        return forSelect.toString();
+    }
+
+    private String generateSelectOccupations()
+    {
+        StringBuilder forSelect = new StringBuilder();
+        forSelect.append("<td>");
+        forSelect.append("<select size=\"8\" required size = \"1\" name=\"FindOcc\">");
+        forSelect.append("<option disabled>Выберите должность</option>");
+
+        for (OccupationElement occElement : Employee.getOcc())
+        {
+            forSelect.append("<option value=\"" + occElement.getId() + "\">" + occElement.getName() + "</option>");
+        }
+        forSelect.append("</select>");
+        forSelect.append("</td>");       
+        return forSelect.toString();
     }
 
     private void printButtons()
@@ -111,6 +147,16 @@ public class Finder extends HttpServlet
             if (req.getParameter("FindName") != null)
             {
                 resultFind = new ConnectionToDb().writeBody(new FindByName(req.getParameter("FindName")));
+            }
+
+            if (req.getParameter("FindOcc") != null)
+            {
+                resultFind = new ConnectionToDb().writeBody(new FindByOccupation(req.getParameter("FindOcc")));
+            }
+
+            if (req.getParameter("FirstDate") != null && req.getParameter("SecondDate") != null)
+            {
+                resultFind = new ConnectionToDb().writeBody(new FindByDate(req.getParameter("FirstDate"), req.getParameter("SecondDate")));
             }
         }
     }

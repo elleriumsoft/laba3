@@ -10,22 +10,24 @@ import java.sql.SQLException;
 /**
  * Created by Dmitriy on 08.02.2017.
  */
-public class FindByName implements GenerateBody
+public class FindByDate implements GenerateBody
 {
-    private String nameForFind;
+    private String firstDate;
+    private String secondDate;
 
-    public FindByName(String nameForFind)
+    public FindByDate(String firstDate, String secondDate)
     {
-        this.nameForFind = nameForFind.toLowerCase();
+        this.firstDate = firstDate;
+        this.secondDate = secondDate;
     }
 
     @Override
     public String doBody(Connection connection) throws SQLException
     {
         ResultSet emp = connection.createStatement().executeQuery("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
-                                                                       " from employee, occupations, structure" +
-                                                                       " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.name LIKE '%" + nameForFind + "%'" +
-                                                                       " ORDER BY employee.name;\n");
+                " from employee, occupations, structure" +
+                " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.date BETWEEN '" + firstDate + "' AND '" + secondDate + "'" +
+                " ORDER BY employee.date;\n");
         ResultSet occ = connection.createStatement().executeQuery("select * from occupations" + ";\n");
         Employee.initEmployee(emp, occ, true);
         String result = Employee.printFindedEmployee();

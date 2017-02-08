@@ -19,7 +19,7 @@ public class ModifyEmployee implements GenerateBody
     public ModifyEmployee(String empName, String empDate, int idOcc, int element, int idDept)
     {
         this.element = element;
-        this.empName = empName;
+        this.empName = empName.toLowerCase();
         this.empDate = empDate;
         this.idOcc = idOcc;
         this.idDept = idDept;

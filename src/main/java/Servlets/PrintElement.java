@@ -3,6 +3,7 @@ package Servlets;
 import Connections.ConnectionToDb;
 import Connections.Employee.DeleteEmployee;
 import Connections.Employee.GenerateElement;
+import Connections.Structure.GenerateSturcture;
 import Data.Structure;
 
 import javax.servlet.ServletException;
@@ -30,6 +31,10 @@ public class PrintElement extends HttpServlet
     {
 
         getParameters(req, resp);
+        if (Structure.getStructure() == null)
+        {
+            new ConnectionToDb().writeBody(new GenerateSturcture(""));
+        }
         nameElement = Structure.getDeptName(idElement);
 
         resp.setContentType("text/html;charset=utf-8");

@@ -12,7 +12,7 @@ public class Employee
     private static ArrayList<EmployeeElement> employee;
     private static ArrayList<OccupationElement> occ;
 
-    public static void initEmployee(ResultSet employee, ResultSet occ) throws SQLException
+    public static void initEmployee(ResultSet employee, ResultSet occ, boolean withDept) throws SQLException
     {
         Employee.employee = new ArrayList<>();
         while (employee.next())
@@ -22,6 +22,11 @@ public class Employee
             el.setName(employee.getString("name"));
             el.setDate(employee.getString("date"));
             el.setOccupation(employee.getString("occ"));
+            if (withDept)
+            {
+                el.setDept(employee.getString("dept"));
+                el.setIdDept(Integer.valueOf(employee.getString("iddept")));
+            }
             Employee.employee.add(el);
         }
 
@@ -51,7 +56,7 @@ public class Employee
                 result.append("<tr>");
 
                 result.append("<td>");
-                result.append(element.getName());
+                result.append(element.getBeautifulName());
                 result.append("</td>");
 
                 result.append("<td>");
@@ -81,10 +86,10 @@ public class Employee
         if (idEmp == -1)
         {
             editFields.append("<td><input type=\"text\" id=\"Editbox1\" name=\"AddNameLine\" value=\"\"  maxlength=\"125\"></td>");
-            editFields.append("<td><input type=\"date\" id=\"Editbox2\" placeholder=\"1980-05-30\" name=\"AddDateLine\" value=\"\"  maxlength=\"10\"></td>");
+            editFields.append("<td><input type=\"date\" id=\"Editbox2\" name=\"AddDateLine\" value=\"\"  maxlength=\"10\"></td>");
         } else
         {
-            editFields.append("<td><input type=\"text\" id=\"Editbox1\" value=\"" + element.getName() + "\" name=\"AddNameLine\" value=\"\"  maxlength=\"125\"></td>");
+            editFields.append("<td><input type=\"text\" id=\"Editbox1\" value=\"" + element.getBeautifulName() + "\" name=\"AddNameLine\" value=\"\"  maxlength=\"125\"></td>");
             editFields.append("<td><input type=\"date\" id=\"Editbox2\" value=\"" + element.getDate() + "\" name=\"AddDateLine\" value=\"\"  maxlength=\"10\"></td>");
         }
 
@@ -92,9 +97,26 @@ public class Employee
         editFields.append("<select size=\"2\" required size = \"1\" name=\"occ\">");
         editFields.append("<option disabled>Выберите должность</option>");
 
-        for (OccupationElement occElement : occ)
+        if (idEmp == -1)
         {
-            editFields.append("<option value=\"" + occElement.getId() + "\">" + occElement.getName() + "</option>");
+            for (OccupationElement occElement : occ)
+            {
+                editFields.append("<option value=\"" + occElement.getId() + "\">" + occElement.getName() + "</option>");
+            }
+        }
+        else
+        {
+            for (int i = 0; i < occ.size(); i++)
+            {
+                if (occ.get(i).getName().equals(element.getOccupation()))
+                {
+                    editFields.append("<option value=\"" + occ.get(i).getId() + "\" selected>" + occ.get(i).getName() + "</option>");
+                }
+                else
+                {
+                    editFields.append("<option value=\"" + occ.get(i).getId() + "\">" + occ.get(i).getName() + "</option>");
+                }
+            }
         }
         editFields.append("</select>");
         editFields.append("</td>");
@@ -133,17 +155,21 @@ public class Employee
         return employee;
     }
 
+    public static ArrayList<OccupationElement> getOcc()
+    {
+        return occ;
+    }
+
     public static String printFindedEmployee()
     {
         StringBuilder result = new StringBuilder("<table border>");
-        result.append("<th>Фамилия Имя Отчество</th><th>Дата рождения</th><th>Должность</th>");
+        result.append("<th>Фамилия Имя Отчество</th><th>Дата рождения</th><th>Должность</th><th>Элемент структуры</th>");
         for (EmployeeElement element : employee)
         {
-            System.out.println(element.getName());
             result.append("<tr>");
 
             result.append("<td>");
-            result.append(element.getName());
+            result.append(element.getBeautifulName());
             result.append("</td>");
 
             result.append("<td>");
@@ -152,6 +178,10 @@ public class Employee
 
             result.append("<td>");
             result.append(element.getOccupation());
+            result.append("</td>");
+
+            result.append("<td>");
+            result.append("<a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(element.getIdDept())+ "\">" + element.getDept() + "</a>");
             result.append("</td>");
 
 

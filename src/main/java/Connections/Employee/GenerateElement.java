@@ -26,9 +26,13 @@ public class GenerateElement implements GenerateBody
     @Override
     public String doBody(Connection connection) throws SQLException
     {
-        ResultSet emp = connection.createStatement().executeQuery("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ from employee, occupations WHERE employee.id_occ = occupations.id  and employee.id_dept=" + String.valueOf(id) + ";\n");
+        ResultSet emp = connection.createStatement().executeQuery
+                ("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ" +
+                        " from employee, occupations" +
+                        " WHERE employee.id_occ = occupations.id  and employee.id_dept=" + String.valueOf(id) +
+                        " ORDER BY occupations.id;\n");
         ResultSet occ = connection.createStatement().executeQuery("select * from occupations" + ";\n");
-            Employee.initEmployee(emp, occ);
+            Employee.initEmployee(emp, occ, false);
             String result = Employee.printEmployee(command, id, idEmp);
         return result;
     }
