@@ -1,10 +1,10 @@
 package Servlets;
 
-import Connections.ConnectionToDb;
-import Connections.Employee.GenerateElement;
-import Connections.Finder.FindByDate;
-import Connections.Finder.FindByName;
-import Connections.Finder.FindByOccupation;
+import RequestsToDatabase.ConnectionToDb;
+import RequestsToDatabase.Employee.GenerateElement;
+import RequestsToDatabase.Finder.FindByDate;
+import RequestsToDatabase.Finder.FindByName;
+import RequestsToDatabase.Finder.FindByOccupation;
 import Data.Employee;
 import Data.OccupationElement;
 
@@ -79,7 +79,7 @@ public class Finder extends HttpServlet
                 break;
             case 2:
                 pw.println("<b>Выберите должность для поиска</b><br>");
-                new ConnectionToDb().writeBody(new GenerateElement("", 0, 0));
+                new ConnectionToDb().connectToDb(new GenerateElement(0));
                 pw.println(generateSelectOccupations());
                 pw.println("<br><br>");
                 break;
@@ -146,17 +146,20 @@ public class Finder extends HttpServlet
 
             if (req.getParameter("FindName") != null)
             {
-                resultFind = new ConnectionToDb().writeBody(new FindByName(req.getParameter("FindName")));
+                new ConnectionToDb().connectToDb(new FindByName(req.getParameter("FindName")));
+                resultFind = Employee.printFindedEmployee();
             }
 
             if (req.getParameter("FindOcc") != null)
             {
-                resultFind = new ConnectionToDb().writeBody(new FindByOccupation(req.getParameter("FindOcc")));
+                new ConnectionToDb().connectToDb(new FindByOccupation(req.getParameter("FindOcc")));
+                resultFind = Employee.printFindedEmployee();
             }
 
             if (req.getParameter("FirstDate") != null && req.getParameter("SecondDate") != null)
             {
-                resultFind = new ConnectionToDb().writeBody(new FindByDate(req.getParameter("FirstDate"), req.getParameter("SecondDate")));
+                new ConnectionToDb().connectToDb(new FindByDate(req.getParameter("FirstDate"), req.getParameter("SecondDate")));
+                resultFind = Employee.printFindedEmployee();
             }
         }
     }

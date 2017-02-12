@@ -6,8 +6,9 @@ package Data;
 public class StructureElement
 {
     private int id;
-    private String name;
+    private String nameDepartment;
     private int parent_id;
+    private int nestingLevel;
 
     public int getId()
     {
@@ -19,14 +20,14 @@ public class StructureElement
         this.id = id;
     }
 
-    public String getName()
+    public String getNameDepartment()
     {
-        return name;
+        return nameDepartment;
     }
 
-    public void setName(String name)
+    public void setNameDepartment(String nameDepartment)
     {
-        this.name = name;
+        this.nameDepartment = nameDepartment;
     }
 
     public int getParent_id()
@@ -37,5 +38,15 @@ public class StructureElement
     public void setParent_id(int parent_id)
     {
         this.parent_id = parent_id;
+    }
+
+    public int getLevel()
+    {
+        return nestingLevel;
+    }
+
+    public void setLevel(int nestingLevel)
+    {
+        this.nestingLevel = nestingLevel;
     }
 }

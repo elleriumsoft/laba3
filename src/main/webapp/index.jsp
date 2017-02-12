@@ -12,6 +12,6 @@
 <body>
     <H1>Лабораторная работа №3</H1>
     <H2><a href="/laba3/Servlets.PrintStructure">Структура мэрии</a></H2>
-    <H2><a href="/laba3/Servlets.Finder">Поиск сотрудника в мэрии</a></H2>
+    <H2><a href="/laba3/Servlets.Finder">Поиск сотрудника мэрии</a></H2>
 </body>
 </html>

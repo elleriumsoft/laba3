@@ -1,9 +1,10 @@
 package Servlets;
 
-import Connections.ConnectionToDb;
-import Connections.Structure.DeleteElement;
-import Connections.Structure.GenerateSturcture;
 import Data.Structure;
+import Data.StructureElement;
+import RequestsToDatabase.ConnectionToDb;
+import RequestsToDatabase.Structure.DeleteElement;
+import RequestsToDatabase.Structure.GenerateSturcture;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,38 +26,108 @@ public class PrintStructure extends HttpServlet
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        verifyForOpenList(req);
+
         fillVarFromRequest(req);
 
         resp.setContentType("text/html;charset=utf-8");
         PrintWriter pw = resp.getWriter();
 
-       pw.println("<head>");
-       pw.println("<title>>Структура мэрии</title>");
-       pw.println("</head>");
+        pw.println("<head>");
+        pw.println("<title>>Структура мэрии</title>");
+        pw.println("</head>");
 
-       pw.println("<h1 style=\"color:#191970\"");
+        pw.println("<h1 style=\"color:#191970\"");
         pw.println("<h1><b>Структура мэрии</b></h1>");
         pw.println("<body>");
 
         if (command.equals(""))
         {
             printButtons(pw);
-        }
-        else
+        } else
         {
             printButtonsForCommand(pw, command, req, resp);
         }
         pw.println("<br>");
         pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/index.jsp';return false;\" name=\"\" value=\"Вернуться в меню\" style=\"position:absolute;left:310px;top:18px;width:184px;height:25px;\">");
 
-        pw.print(new ConnectionToDb().writeBody(new GenerateSturcture(command)));
+        new ConnectionToDb().connectToDb(new GenerateSturcture());
+
+        pw.print(Structure.printStructure(command));
+
         pw.println("</body>");
         pw.close();
     }
 
+    private void verifyForOpenList(HttpServletRequest req)
+    {
+        if (req.getParameter("open") != null)
+        {
+            if (req.getParameter("open").equals("all"))
+            {
+                Structure.getOpenElements().clear();
+                for (StructureElement element : Structure.getStructure())
+                {
+                    if (elementHasChild(element.getId()))
+                    {
+                        Structure.getOpenElements().add(element.getId());
+                    }
+                }
+            }
+            else
+            {
+                Structure.getOpenElements().add((Integer.valueOf(req.getParameter("open"))));
+            }
+        }
+        if (req.getParameter("close") != null)
+        {
+            if (req.getParameter("close").equals("all"))
+            {
+                removeFromOpen(1);
+            }
+            else
+            {
+                removeFromOpen(Integer.valueOf(req.getParameter("close")));
+            }
+        }
+    }
+
+    private void removeFromOpen(int id)
+    {
+        for (int i = 0; i< Structure.getOpenElements().size(); i++)
+        {
+
+            if (Structure.getOpenElements().get(i) == id)
+            {
+                Structure.getOpenElements().remove(i);
+
+                for (int j = 0; j < Structure.getStructure().size(); j++)
+                {
+                    if (Structure.getStructure().get(j).getParent_id() == id)
+                    {
+                        removeFromOpen(Structure.getStructure().get(j).getId());
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    private boolean elementHasChild(int id)
+    {
+        for (StructureElement el : Structure.getStructure())
+        {
+            if (el.getParent_id() == id)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void fillVarFromRequest(HttpServletRequest req)
     {
-        if (req.getParameterNames().hasMoreElements())
+        if (req.getParameter("command") != null)
         {
             command = req.getParameter("command");
         }
@@ -64,7 +135,7 @@ public class PrintStructure extends HttpServlet
         {
             command = "";
         }
-        if (req.getParameterNames().hasMoreElements() && req.getParameter("element") != null)
+        if (req.getParameter("element") != null)
         {
             idForAction = Integer.valueOf(req.getParameter("element"));
         }
@@ -79,6 +150,8 @@ public class PrintStructure extends HttpServlet
         pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure?command=add';return false;\" name=\"\" value=\"Добавить\" style=\"position:absolute;left:9px;top:51px;width:104px;height:25px;color:#FF0000;\">");
         pw.println("<input type=\"submit\" id=\"Button2\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure?command=edit';return false;\" name=\"\" value=\"Редактировать\" style=\"position:absolute;left:121px;top:51px;width:104px;height:25px;color:#FF0000;\">");
         pw.println("<input type=\"submit\" id=\"Button3\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure?command=delete';return false;\" name=\"\" value=\"Удалить\" style=\"position:absolute;left:235px;top:51px;width:104px;height:25px;color:#FF0000;\">");
+        pw.println("<input type=\"submit\" id=\"Button4\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure?open=all';return false;\" name=\"\" value=\"Открыть всё\" style=\"position:absolute;left:360px;top:51px;width:104px;height:25px;color:#16520a;\">");
+        pw.println("<input type=\"submit\" id=\"Button5\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure?close=all';return false;\" name=\"\" value=\"Закрыть всё\" style=\"position:absolute;left:474px;top:51px;width:104px;height:25px;color:#16520a;\">");
     }
 
     private void printButtonsForCommand(PrintWriter pw, String command, HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -107,7 +180,7 @@ public class PrintStructure extends HttpServlet
             }
             if (command.equals("delete"))
             {
-                new ConnectionToDb().writeBody(new DeleteElement(idForAction));
+                new ConnectionToDb().connectToDb(new DeleteElement(String.valueOf(idForAction)));
                 returnToStartPage(response);
             }
         }

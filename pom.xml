@@ -90,6 +90,29 @@
   <finalName>${project.artifactId}</finalName>
   <plugins>
     <plugin>
+      <artifactId>maven-resources-plugin</artifactId>
+      <version>3.0.2</version>
+      <executions>
+        <execution>
+          <id>copy-resources</id>
+          <phase>validate</phase>
+          <goals>
+            <goal>copy-resources</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>${basedir}/target/laba3/images</outputDirectory>
+            <resources>
+              <resource>
+                <directory>src/images</directory>
+                <filtering>true</filtering>
+              </resource>
+            </resources>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+
+    <plugin>
       <artifactId>maven-war-plugin</artifactId>
       <version>${version.war.plugin}</version>
       <configuration>

@@ -1,4 +1,4 @@
-package Connections;
+package RequestsToDatabase;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -11,14 +11,14 @@ import java.sql.SQLException;
  */
 public class ConnectionToDb
 {
-    public String writeBody(GenerateBody generateBody)
+    public void connectToDb(DatabaseRequest databaseRequest)
     {
         Connection connection = null;
-        String out = "";
+
         try
         {
             connection = getConnection();
-            out = generateBody.doBody(connection);
+            databaseRequest.sendRequest(connection);
         }
         catch (SQLException e)
         {
@@ -27,7 +27,6 @@ public class ConnectionToDb
         finally
         {
             closeConnection(connection);
-            return out;
         }
     }
 

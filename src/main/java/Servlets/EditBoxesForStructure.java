@@ -1,8 +1,8 @@
 package Servlets;
 
-import Connections.Structure.AddElement;
-import Connections.ConnectionToDb;
-import Connections.Structure.EditElement;
+import RequestsToDatabase.Structure.AddElement;
+import RequestsToDatabase.ConnectionToDb;
+import RequestsToDatabase.Structure.EditElement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,13 +27,13 @@ public class EditBoxesForStructure extends HttpServlet
             {
                 int idForAction  = Integer.valueOf((String)req.getSession().getAttribute("idforaction"));
 
-                new ConnectionToDb().writeBody(new AddElement(req.getParameter("EditAdd"), idForAction));
+                new ConnectionToDb().connectToDb(new AddElement(req.getParameter("EditAdd"), idForAction));
             }
             if (req.getParameter("EditEdit") != null)
             {
                 int idForAction  = Integer.valueOf((String)req.getSession().getAttribute("idforaction"));
 
-                new ConnectionToDb().writeBody(new EditElement(req.getParameter("EditEdit"), idForAction));
+                new ConnectionToDb().connectToDb(new EditElement(req.getParameter("EditEdit"), idForAction));
 
             }
 

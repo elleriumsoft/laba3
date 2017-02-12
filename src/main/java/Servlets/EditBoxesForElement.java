@@ -1,7 +1,7 @@
 package Servlets;
 
-import Connections.Employee.ModifyEmployee;
-import Connections.ConnectionToDb;
+import RequestsToDatabase.Employee.ModifyEmployee;
+import RequestsToDatabase.ConnectionToDb;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,7 +28,7 @@ public class EditBoxesForElement extends HttpServlet
             {
                 int idForAction  = Integer.valueOf((String)req.getSession().getAttribute("idforaction2"));
 
-                new ConnectionToDb().writeBody(new ModifyEmployee(req.getParameter("AddNameLine"), req.getParameter("AddDateLine"), Integer.valueOf(req.getParameter("occ")), idForAction, idDept));
+                new ConnectionToDb().connectToDb(new ModifyEmployee(req.getParameter("AddNameLine"), req.getParameter("AddDateLine"), Integer.valueOf(req.getParameter("occ")), idForAction, idDept));
             }
 
             resp.sendRedirect("/laba3/Servlets.PrintElement?id=" + String.valueOf(idDept) );

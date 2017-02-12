@@ -1,10 +1,11 @@
 package Servlets;
 
-import Connections.ConnectionToDb;
-import Connections.Employee.DeleteEmployee;
-import Connections.Employee.GenerateElement;
-import Connections.Structure.GenerateSturcture;
+import Data.Employee;
 import Data.Structure;
+import RequestsToDatabase.ConnectionToDb;
+import RequestsToDatabase.Employee.DeleteEmployee;
+import RequestsToDatabase.Employee.GenerateElement;
+import RequestsToDatabase.Structure.GenerateSturcture;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,7 +34,7 @@ public class PrintElement extends HttpServlet
         getParameters(req, resp);
         if (Structure.getStructure() == null)
         {
-            new ConnectionToDb().writeBody(new GenerateSturcture(""));
+            new ConnectionToDb().connectToDb(new GenerateSturcture());
         }
         nameElement = Structure.getDeptName(idElement);
 
@@ -48,14 +49,16 @@ public class PrintElement extends HttpServlet
         pw.println("<h1 style=\"color:#191970\"");
         pw.println("<h1><b>" + nameElement + "</b></h1>");
         pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintStructure';return false;\" name=\"\" value=\"Вернуться к структуре\" style=\"position:absolute;left:8px;top:50px;width:184px;height:25px;z-index:0;\">");
-//        pw.println("<a href=\"/laba3/Servlets.PrintStructure\"style=\"color:#808080\">[вернуться к структуре]</a>");
+
         pw.println("<br>");
         pw.println("<h2 style=\"color:#191970\"");
         pw.println("<h2><b>Сотрудники</b></h2>");
         printButtons(pw);
         pw.println("<br>");
 
-        pw.print(new ConnectionToDb().writeBody(new GenerateElement(command, idElement, idEmployee)));
+        new ConnectionToDb().connectToDb(new GenerateElement(idElement));
+
+        pw.print(Employee.printEmployee(command, idElement, idEmployee));
         pw.println("</body>");
     }
 
@@ -90,7 +93,7 @@ public class PrintElement extends HttpServlet
         }
         if (command.equals("delete") && idEmployee != -1)
         {
-            new ConnectionToDb().writeBody(new DeleteEmployee(idEmployee));
+            new ConnectionToDb().connectToDb(new DeleteEmployee(idEmployee));
             resp.sendRedirect("/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement));
         }
     }
@@ -102,12 +105,10 @@ public class PrintElement extends HttpServlet
             pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href=" + getLink("add") + ";return false;\" name=\"\" value=\"Добавить\" style=\"position:absolute;left:8px;top:136px;width:104px;height:25px;color:#FF0000;\">");
             pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href=" + getLink("edit") + ";return false;\" name=\"\" value=\"Редактировать\" style=\"position:absolute;left:120px;top:136px;width:104px;height:25px;color:#FF0000;\">");
             pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href=" + getLink("delete") + ";return false;\" name=\"\" value=\"Удалить\" style=\"position:absolute;left:234px;top:136px;width:104px;height:25px;color:#FF0000;\">");
-            //pw.println("<a href=" + getLink("add") + ">Добавить</a>&nbsp<a href=" + getLink("edit") + ">Редактировать</a>&nbsp<a href=" + getLink("delete") + ">Удалить</a>&nbsp");
         }
         else
         {
             pw.println("<input type=\"submit\" id=\"Button1\" onclick=\"window.location.href='/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement) + "';return false;\" name=\"\" value=\"Отмена\" style=\"position:absolute;left:8px;top:136px;width:104px;height:25px;color:#FF0000;\">");
-            //pw.println("<a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement) + "\">Отмена</a>");
         }
     }
 }
