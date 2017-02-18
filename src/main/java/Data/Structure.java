@@ -9,9 +9,9 @@ import java.util.ArrayList;
  */
 public class Structure
 {
-    private static ArrayList<StructureElement> structure;
-    private static ArrayList<StructureElement> structureFromDb;
-    private static ArrayList<Integer> openElements = new ArrayList<>();
+    private ArrayList<StructureElement> structure;
+    private ArrayList<StructureElement> structureFromDb;
+    private ArrayList<Integer> openElements = new ArrayList<>();
 
     /**
      * Инициализация структуры из БД в виде дерева
@@ -19,7 +19,7 @@ public class Structure
      * @param rs - результат запроса данных о структуре из БД
      * @throws SQLException
      */
-    public static void initStructureFromDb(ResultSet rs) throws SQLException
+    public void initStructureFromDb(ResultSet rs) throws SQLException
     {
         structureFromDb = new ArrayList<>();
         while (rs.next())
@@ -32,7 +32,7 @@ public class Structure
         initElement(level, parentId);
     }
 
-    private static void initElement(int level, int parentId)
+    private void initElement(int level, int parentId)
     {
         StructureElement el;
         for (int i = 0; i < structureFromDb.size(); i++)
@@ -55,7 +55,7 @@ public class Structure
      * @param command Добавленная ссылка на команду действия с элементом
      * @return Сформированная HTML страница
      */
-    public static String printStructure(String command)
+    public String printStructure(String command)
     {
         StringBuilder pw = new StringBuilder("");
         for (StructureElement el : structure)
@@ -75,7 +75,7 @@ public class Structure
         return pw.toString();
     }
 
-    private static boolean isElementOpen(int id)
+    private boolean isElementOpen(int id)
     {
         boolean isOpen = false;
         for (int i = 0; i < openElements.size(); i++)
@@ -88,7 +88,7 @@ public class Structure
         return isOpen;
     }
 
-    private static String addSpaces(int level)
+    private String addSpaces(int level)
     {
         String spaces = "";
         for (int i = 0; i < level; i++)
@@ -98,7 +98,7 @@ public class Structure
         return spaces;
     }
 
-    private static String addImageForActionList(boolean isOpen, int id)
+    private String addImageForActionList(boolean isOpen, int id)
     {
         if (elementHasChild(id))
         {
@@ -116,16 +116,16 @@ public class Structure
         }
     }
 
-    private static boolean elementHasChild(int id)
+    private boolean elementHasChild(int id)
     {
-        for (StructureElement element : Structure.getStructure())
+        for (StructureElement element : structure)
         {
             if (element.getParent_id() == id) { return true;}
         }
         return false;
     }
 
-    public static StructureElement newElement(int id, String name, int parent_id)
+    public StructureElement newElement(int id, String name, int parent_id)
     {
         StructureElement element = new StructureElement();
         element.setId(id);
@@ -134,17 +134,22 @@ public class Structure
         return element;
     }
 
-    public static ArrayList<StructureElement> getStructure()
+    public ArrayList<StructureElement> getStructure()
     {
         return structure;
     }
 
-    public static ArrayList<Integer> getOpenElements()
+    public ArrayList<Integer> getOpenElements()
     {
         return openElements;
     }
 
-    public static String getDeptName(int id)
+    public void setOpenElements(ArrayList<Integer> openElements)
+    {
+        this.openElements = openElements;
+    }
+
+    public String getDeptName(int id)
     {
         for (StructureElement element: structure)
         {
@@ -186,7 +191,7 @@ public class Structure
 //        }
 //    }
 
-    private static String getStringCommand(String command)
+    private String getStringCommand(String command)
     {
         if (command.equals("add"))
         {
@@ -205,4 +210,5 @@ public class Structure
             return "";
         }
     }
+
 }

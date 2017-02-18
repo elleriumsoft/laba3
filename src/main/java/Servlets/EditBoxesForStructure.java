@@ -1,7 +1,9 @@
 package Servlets;
 
-import RequestsToDatabase.Structure.AddElement;
+import Data.Structure;
+import Data.StructureProcessing;
 import RequestsToDatabase.ConnectionToDb;
+import RequestsToDatabase.Structure.AddElement;
 import RequestsToDatabase.Structure.EditElement;
 
 import javax.servlet.ServletException;
@@ -28,6 +30,10 @@ public class EditBoxesForStructure extends HttpServlet
                 int idForAction  = Integer.valueOf((String)req.getSession().getAttribute("idforaction"));
 
                 new ConnectionToDb().connectToDb(new AddElement(req.getParameter("EditAdd"), idForAction));
+
+                Structure structure = StructureProcessing.loadStructure(req);
+                structure.getOpenElements().add(idForAction);
+                StructureProcessing.saveStructure(req, structure);
             }
             if (req.getParameter("EditEdit") != null)
             {
@@ -36,9 +42,7 @@ public class EditBoxesForStructure extends HttpServlet
                 new ConnectionToDb().connectToDb(new EditElement(req.getParameter("EditEdit"), idForAction));
 
             }
-
-            resp.sendRedirect("/laba3/Servlets.PrintStructure");
-
+            resp.sendRedirect("/laba3/Servlets.PrintStructure?renew=1");
         }
     }
 

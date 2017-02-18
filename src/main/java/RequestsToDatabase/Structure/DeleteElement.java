@@ -14,9 +14,11 @@ import java.sql.SQLException;
 public class DeleteElement implements DatabaseRequest
 {
     private int element;
+    private Structure structure;
 
-    public DeleteElement(String element)
+    public DeleteElement(Structure structure, String element)
     {
+        this.structure = structure;
         this.element = Integer.valueOf(element);
     }
 
@@ -25,6 +27,7 @@ public class DeleteElement implements DatabaseRequest
     {
         //connection.createStatement().executeUpdate("DELETE FROM structure WHERE id=" + element + ";\n");
         deleteElement(connection, element);
+
     }
 
     private void deleteElement(Connection connection, int id) throws SQLException
@@ -34,7 +37,7 @@ public class DeleteElement implements DatabaseRequest
         statement.executeUpdate();
         statement.close();
 
-        for (StructureElement structureElement : Structure.getStructure())
+        for (StructureElement structureElement : structure.getStructure())
         {
             if (structureElement.getParent_id() == id)
             {

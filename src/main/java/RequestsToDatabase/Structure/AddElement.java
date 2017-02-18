@@ -1,6 +1,5 @@
 package RequestsToDatabase.Structure;
 
-import Data.Structure;
 import RequestsToDatabase.DatabaseRequest;
 
 import java.sql.Connection;
@@ -30,6 +29,5 @@ public class AddElement implements DatabaseRequest
         statement.setInt(2, element);
         statement.executeUpdate();
         statement.close();
-        Structure.getOpenElements().add(element);
     }
 }

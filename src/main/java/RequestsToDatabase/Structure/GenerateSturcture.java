@@ -12,12 +12,18 @@ import java.sql.SQLException;
  */
 public class GenerateSturcture implements DatabaseRequest
 {
+    private Structure structure;
 
     @Override
     public void sendRequest(Connection connection) throws SQLException
     {
         ResultSet rs = connection.prepareStatement("select * from structure").executeQuery();
-        //ResultSet rs = connection.createStatement().executeQuery("select * from structure");
-        Structure.initStructureFromDb(rs);
+        structure = new Structure();
+        structure.initStructureFromDb(rs);
+    }
+
+    public Structure getStructure()
+    {
+        return structure;
     }
 }

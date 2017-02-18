@@ -2,10 +2,10 @@ package Servlets;
 
 import Data.Employee;
 import Data.Structure;
+import Data.StructureProcessing;
 import RequestsToDatabase.ConnectionToDb;
 import RequestsToDatabase.Employee.DeleteEmployee;
 import RequestsToDatabase.Employee.GenerateElement;
-import RequestsToDatabase.Structure.GenerateSturcture;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,11 +32,9 @@ public class PrintElement extends HttpServlet
     {
 
         getParameters(req, resp);
-        if (Structure.getStructure() == null)
-        {
-            new ConnectionToDb().connectToDb(new GenerateSturcture());
-        }
-        nameElement = Structure.getDeptName(idElement);
+
+        Structure structure = StructureProcessing.loadStructure(req);
+        nameElement = structure.getDeptName(idElement);
 
         resp.setContentType("text/html;charset=utf-8");
         PrintWriter pw = resp.getWriter();
