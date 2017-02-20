@@ -40,7 +40,7 @@ public class ModifyEmployee implements DatabaseRequest
         {
             statement = connection.prepareStatement("UPDATE employee" +
                                                         " SET id_dept=?, id_occ=?, name=?, date=?" +
-                                                        " WHERE id=?)");
+                                                        " WHERE id=?");
             statement.setInt(5, element);
             //connection.createStatement().executeUpdate("UPDATE employee SET id_dept=" + String.valueOf(idDept) + ", id_occ=" + String.valueOf(idOcc) + ", name='" + empName + "', date='" + empDate + "' WHERE id=" + String.valueOf(element) + ";\n");
         }

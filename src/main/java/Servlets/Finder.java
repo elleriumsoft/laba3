@@ -1,11 +1,7 @@
 package Servlets;
 
-import RequestsToDatabase.ConnectionToDb;
-import RequestsToDatabase.Employee.GenerateElement;
-import RequestsToDatabase.Finder.FindByDate;
-import RequestsToDatabase.Finder.FindByName;
-import RequestsToDatabase.Finder.FindByOccupation;
 import Data.Employee;
+import Data.EmployeeProcessing;
 import Data.OccupationElement;
 
 import javax.servlet.ServletException;
@@ -79,7 +75,6 @@ public class Finder extends HttpServlet
                 break;
             case 2:
                 pw.println("<b>Выберите должность для поиска</b><br>");
-                new ConnectionToDb().connectToDb(new GenerateElement(0));
                 pw.println(generateSelectOccupations());
                 pw.println("<br><br>");
                 break;
@@ -109,7 +104,8 @@ public class Finder extends HttpServlet
         forSelect.append("<select size=\"8\" required size = \"1\" name=\"FindOcc\">");
         forSelect.append("<option disabled>Выберите должность</option>");
 
-        for (OccupationElement occElement : Employee.getOcc())
+        Employee employee = new EmployeeProcessing().loadEmployee(0);
+        for (OccupationElement occElement : employee.getOcc())
         {
             forSelect.append("<option value=\"" + occElement.getId() + "\">" + occElement.getName() + "</option>");
         }
@@ -144,23 +140,7 @@ public class Finder extends HttpServlet
                 selectFinder = Integer.valueOf(req.getParameter("find"));
             }
 
-            if (req.getParameter("FindName") != null)
-            {
-                new ConnectionToDb().connectToDb(new FindByName(req.getParameter("FindName")));
-                resultFind = Employee.printFindedEmployee();
-            }
-
-            if (req.getParameter("FindOcc") != null)
-            {
-                new ConnectionToDb().connectToDb(new FindByOccupation(req.getParameter("FindOcc")));
-                resultFind = Employee.printFindedEmployee();
-            }
-
-            if (req.getParameter("FirstDate") != null && req.getParameter("SecondDate") != null)
-            {
-                new ConnectionToDb().connectToDb(new FindByDate(req.getParameter("FirstDate"), req.getParameter("SecondDate")));
-                resultFind = Employee.printFindedEmployee();
-            }
+            resultFind = new EmployeeProcessing().findElements(req);
         }
     }
 }

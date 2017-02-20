@@ -1,7 +1,7 @@
 package RequestsToDatabase.Employee;
 
-import RequestsToDatabase.DatabaseRequest;
 import Data.Employee;
+import RequestsToDatabase.DatabaseRequest;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +14,7 @@ import java.sql.SQLException;
 public class GenerateElement implements DatabaseRequest
 {
     private int id;
+    private Employee employee;
 
     public GenerateElement(int id)
     {
@@ -33,6 +34,12 @@ public class GenerateElement implements DatabaseRequest
 
         ResultSet occ = connection.createStatement().executeQuery("select * from occupations;\n");
 
-        Employee.initEmployee(emp, occ, false);
+        employee = new Employee();
+        employee.initEmployee(emp, occ, false);
+    }
+
+    public Employee getEmployee()
+    {
+        return employee;
     }
 }

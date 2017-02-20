@@ -13,5 +13,6 @@
     <H1>Лабораторная работа №3</H1>
     <H2><a href="/laba3/Servlets.PrintStructure">Структура мэрии</a></H2>
     <H2><a href="/laba3/Servlets.Finder">Поиск сотрудника мэрии</a></H2>
+    <H2><a href="/laba3/FinderJsp.jsp">Поиск сотрудника мэрии JSP</a></H2>
 </body>
 </html>

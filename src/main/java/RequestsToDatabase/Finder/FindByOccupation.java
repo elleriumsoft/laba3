@@ -1,10 +1,9 @@
 package RequestsToDatabase.Finder;
 
-import RequestsToDatabase.DatabaseRequest;
 import Data.Employee;
+import RequestsToDatabase.DatabaseRequest;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -13,26 +12,37 @@ import java.sql.SQLException;
  */
 public class FindByOccupation implements DatabaseRequest
 {
-    private int idOccupationForFind;
+    private String  idOccupationForFind;
+    private Employee employee;
 
     public FindByOccupation(String idOccupationForFind)
     {
-        this.idOccupationForFind = Integer.valueOf(idOccupationForFind);
+        this.idOccupationForFind = idOccupationForFind;
     }
 
     @Override
     public void sendRequest(Connection connection) throws SQLException
     {
-        PreparedStatement statement = connection.prepareStatement(
-                    "select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
-                        " from employee, occupations, structure" +
-                        " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.id_occ = ?" +
-                        " ORDER BY employee.name");
-        statement.setInt(1, idOccupationForFind);
-        ResultSet emp = statement.executeQuery();
+//        PreparedStatement statement = connection.prepareStatement(
+//                    "select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
+//                        " from employee, occupations, structure" +
+//                        " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.id_occ = ?" +
+//                        " ORDER BY employee.name");
+//        statement.setInt(1, idOccupationForFind);
+//        ResultSet emp = statement.executeQuery();
+        ResultSet emp =  connection.createStatement().executeQuery("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
+                                                                    " from employee, occupations, structure" +
+                                                                    " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.id_occ =" + idOccupationForFind +
+                                                                    " ORDER BY employee.name");
 
         ResultSet occ = connection.createStatement().executeQuery("select * from occupations");
 
-        Employee.initEmployee(emp, occ, true);
+        employee = new Employee();
+        employee.initEmployee(emp, occ, true);
+    }
+
+    public Employee getEmployee()
+    {
+        return employee;
     }
 }

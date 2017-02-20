@@ -1,10 +1,9 @@
 package RequestsToDatabase.Finder;
 
-import RequestsToDatabase.DatabaseRequest;
 import Data.Employee;
+import RequestsToDatabase.DatabaseRequest;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -14,6 +13,7 @@ import java.sql.SQLException;
 public class FindByName implements DatabaseRequest
 {
     private String nameForFind;
+    private Employee employee;
 
     public FindByName(String nameForFind)
     {
@@ -23,14 +23,25 @@ public class FindByName implements DatabaseRequest
     @Override
     public void sendRequest(Connection connection) throws SQLException
     {
-        PreparedStatement statement = connection.prepareStatement("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
+//        PreparedStatement statement = connection.prepareStatement("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
+//                                                                       " from employee, occupations, structure" +
+//                                                                       " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.name LIKE '%?%'" +
+//                                                                       " ORDER BY employee.name");
+//        statement.setString(1, nameForFind);
+//        ResultSet emp = statement.executeQuery();
+        ResultSet emp =  connection.createStatement().executeQuery("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
                                                                        " from employee, occupations, structure" +
-                                                                       " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.name LIKE '%?%'" +
+                                                                       " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.name LIKE '%" + nameForFind + "%'" +
                                                                        " ORDER BY employee.name");
-        statement.setString(1, nameForFind);
-        ResultSet emp = statement.executeQuery();
 
         ResultSet occ = connection.createStatement().executeQuery("select * from occupations");
-        Employee.initEmployee(emp, occ, true);
+
+        employee = new Employee();
+        employee.initEmployee(emp, occ, true);
+    }
+
+    public Employee getEmployee()
+    {
+        return employee;
     }
 }

@@ -31,7 +31,7 @@ public class EditBoxesForElement extends HttpServlet
                 new ConnectionToDb().connectToDb(new ModifyEmployee(req.getParameter("AddNameLine"), req.getParameter("AddDateLine"), Integer.valueOf(req.getParameter("occ")), idForAction, idDept));
             }
 
-            resp.sendRedirect("/laba3/Servlets.PrintElement?id=" + String.valueOf(idDept) );
+            resp.sendRedirect("/laba3/PrintElementJsp.jsp?id=" + String.valueOf(idDept) );//resp.sendRedirect("/laba3/Servlets.PrintElement?id=" + String.valueOf(idDept) );
         }
     }
 

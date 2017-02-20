@@ -1,11 +1,11 @@
 package Servlets;
 
 import Data.Employee;
+import Data.EmployeeProcessing;
 import Data.Structure;
 import Data.StructureProcessing;
 import RequestsToDatabase.ConnectionToDb;
 import RequestsToDatabase.Employee.DeleteEmployee;
-import RequestsToDatabase.Employee.GenerateElement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,9 +54,10 @@ public class PrintElement extends HttpServlet
         printButtons(pw);
         pw.println("<br>");
 
-        new ConnectionToDb().connectToDb(new GenerateElement(idElement));
+//        new ConnectionToDb().connectToDb(new GenerateElement(idElement));
+        Employee employee = new EmployeeProcessing().loadEmployee(idElement);
 
-        pw.print(Employee.printEmployee(command, idElement, idEmployee));
+        pw.print(employee.printEmployee(command, idElement, String.valueOf((idEmployee))));
         pw.println("</body>");
     }
 

@@ -9,36 +9,40 @@ import java.util.ArrayList;
  */
 public class Employee
 {
-    private static ArrayList<EmployeeElement> employee;
-    private static ArrayList<OccupationElement> occ;
+    private ArrayList<EmployeeElement> employee = new ArrayList<>();
+    private ArrayList<OccupationElement> occ;
 
-    public static void initEmployee(ResultSet employee, ResultSet occ, boolean withDept) throws SQLException
+    public void initEmployee(ResultSet employeeSet, ResultSet occupationSet, boolean withDept) throws SQLException
     {
-        Employee.employee = new ArrayList<>();
-        while (employee.next())
+        employee = new ArrayList<>();
+        while (employeeSet.next())
         {
             EmployeeElement el = new EmployeeElement();
-            el.setId(employee.getInt("id"));
-            el.setName(employee.getString("name"));
-            el.setDate(employee.getString("date"));
-            el.setOccupation(employee.getString("occ"));
+            el.setId(employeeSet.getInt("id"));
+            el.setName(employeeSet.getString("name"));
+            el.setDate(employeeSet.getString("date"));
+            el.setOccupation(employeeSet.getString("occ"));
             if (withDept)
             {
-                el.setDept(employee.getString("dept"));
-                el.setIdDept(Integer.valueOf(employee.getString("iddept")));
+                el.setDept(employeeSet.getString("dept"));
+                el.setIdDept(Integer.valueOf(employeeSet.getString("iddept")));
             }
-            Employee.employee.add(el);
+            employee.add(el);
         }
 
-        Employee.occ = new ArrayList<>();
-        while (occ.next())
+        occ = new ArrayList<>();
+        while (occupationSet.next())
         {
-            Employee.occ.add(new OccupationElement(occ.getInt("id"), occ.getString("occupation")));
+            occ.add(new OccupationElement(occupationSet.getInt("id"), occupationSet.getString("occupation")));
         }
     }
 
-    public static String printEmployee(String command, int idElement, int idEmp)
+    public String printEmployee(String command, int idElement, String idEmpString)
     {
+        if (command == null){command = "";}
+        if (idEmpString == null){idEmpString = "-1";}
+        Integer idEmp = Integer.valueOf(idEmpString);
+
         StringBuilder result = new StringBuilder("<table border>");
         result.append("<th>Фамилия Имя Отчество</th><th>Дата рождения</th><th>Должность</th>");
         if (command.equals("add"))
@@ -69,7 +73,7 @@ public class Employee
 
                 if (!command.equals("") && !(command.equals("add")))
                 {
-                    result.append("<td><a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(idElement) + "&command=" + command + "&idemployee=" + element.getId() + "\"style=\"color:#FF0000\">" + getRussianCommand(command) + "</a></td>");
+                    result.append("<td><a href=\"/laba3/PrintElementJsp.jsp?id=" + String.valueOf(idElement) + "&command=" + command + "&idemployee=" + element.getId() + "\"style=\"color:#FF0000\">" + getRussianCommand(command) + "</a></td>");
                 }
             }
 
@@ -79,7 +83,7 @@ public class Employee
         return result.toString();
     }
 
-    private static StringBuilder addEditFields(EmployeeElement element, int idEmp)
+    private StringBuilder addEditFields(EmployeeElement element, int idEmp)
     {
         StringBuilder editFields = new StringBuilder("<tr>");
         editFields.append("<form name=\"add\" method=\"get\" action=\"/laba3/Servlets.EditBoxesForElement\">");
@@ -133,7 +137,7 @@ public class Employee
         return editFields;
     }
 
-    private static String getRussianCommand(String command)
+    private String getRussianCommand(String command)
     {
         if (command.equals("add"))
         {
@@ -150,19 +154,20 @@ public class Employee
         return "";
     }
 
-    public static ArrayList<EmployeeElement> getEmployee()
+    public  ArrayList<EmployeeElement> getEmployee()
     {
         return employee;
     }
 
-    public static ArrayList<OccupationElement> getOcc()
+    public  ArrayList<OccupationElement> getOcc()
     {
         return occ;
     }
 
-    public static String printFindedEmployee()
+    public String printFindedEmployee()
     {
         StringBuilder result = new StringBuilder("<table border>");
+
         result.append("<th>Фамилия Имя Отчество</th><th>Дата рождения</th><th>Должность</th><th>Элемент структуры</th>");
         for (EmployeeElement element : employee)
         {
@@ -181,13 +186,16 @@ public class Employee
             result.append("</td>");
 
             result.append("<td>");
-            result.append("<a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(element.getIdDept())+ "\">" + element.getDept() + "</a>");
+            result.append("<a href=\"/laba3/PrintElementJsp.jsp?id=" + String.valueOf(element.getIdDept()) + "\">" + element.getDept() + "</a>");
             result.append("</td>");
 
 
             result.append("</tr>");
         }
         result.append("</table>");
+
+
         return result.toString();
+
     }
 }
