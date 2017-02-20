@@ -1,6 +1,7 @@
 <%@ page import="Data.Employee" %>
 <%@ page import="Data.EmployeeProcessing" %>
-<%@ page import="Data.OccupationElement" %><%--
+<%@ page import="Data.OccupationElement" %>
+<%@ page import="RequestsToDatabase.Finder.CommandForFind" %><%--
   Created by IntelliJ IDEA.
   User: Dmitriy
   Date: 19.02.2017
@@ -66,9 +67,9 @@
                case 3:
 %>
                     <b>Выберите интервал дат для поиска</b><br>
-                    <td><input type="date" id="Editbox2" name="FirstDate" value=""  maxlength="10"></td>
+                    <td><input type="date" id="Editbox2" name="Date1" value=""  maxlength="10"></td>
                      -
-                    <td><input type="date" id="Editbox3" name="SecondDate" value=""  maxlength="10"></td>
+                    <td><input type="date" id="Editbox3" name="Date2" value=""  maxlength="10"></td>
                     <br><br>
 <%
                 }
@@ -77,7 +78,7 @@
                 </form>
 <%
         }
-        resultFind = new EmployeeProcessing().findElements(request);
+        resultFind = new CommandForFind().findElements(request);
 %>
             <br>
 <%

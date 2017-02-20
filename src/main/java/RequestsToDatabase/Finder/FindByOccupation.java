@@ -10,15 +10,15 @@ import java.sql.SQLException;
 /**
  * Created by Dmitriy on 08.02.2017.
  */
-public class FindByOccupation implements DatabaseRequest
+public class FindByOccupation extends DatabaseRequestForFinder implements DatabaseRequest
 {
-    private String  idOccupationForFind;
-    private Employee employee;
-
-    public FindByOccupation(String idOccupationForFind)
-    {
-        this.idOccupationForFind = idOccupationForFind;
-    }
+//    private String  idOccupationForFind;
+//    private Employee employee;
+//
+//    public FindByOccupation(String idOccupationForFind)
+//    {
+//        this.idOccupationForFind = idOccupationForFind;
+//    }
 
     @Override
     public void sendRequest(Connection connection) throws SQLException
@@ -32,7 +32,7 @@ public class FindByOccupation implements DatabaseRequest
 //        ResultSet emp = statement.executeQuery();
         ResultSet emp =  connection.createStatement().executeQuery("select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
                                                                     " from employee, occupations, structure" +
-                                                                    " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.id_occ =" + idOccupationForFind +
+                                                                    " WHERE employee.id_occ = occupations.id  and employee.id_dept = structure.id and employee.id_occ =" + getParameter1() +
                                                                     " ORDER BY employee.name");
 
         ResultSet occ = connection.createStatement().executeQuery("select * from occupations");
@@ -41,8 +41,8 @@ public class FindByOccupation implements DatabaseRequest
         employee.initEmployee(emp, occ, true);
     }
 
-    public Employee getEmployee()
-    {
-        return employee;
-    }
+//    public Employee getEmployee()
+//    {
+//        return employee;
+//    }
 }
