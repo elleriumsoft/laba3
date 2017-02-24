@@ -1,5 +1,7 @@
 package RequestsToDatabase;
 
+import jdbc.ConnectionHandler;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -11,6 +13,26 @@ import java.sql.SQLException;
  */
 public class ConnectionToDb
 {
+    public Object execute(ConnectionHandler handler)
+    {
+        Object result = null;
+        Connection connection = null;
+        try
+        {
+            connection = getConnection();
+            result = handler.onConnection(connection);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            closeConnection(connection);
+        }
+        return result;//null return is possible, it is bad, think something better
+    }
+
     public void connectToDb(DatabaseRequest databaseRequest)
     {
         Connection connection = null;

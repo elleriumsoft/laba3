@@ -28,7 +28,6 @@ public class CommandForFind
 
     public String findElements(HttpServletRequest req)
     {
-
         Enumeration<String> parameters = req.getParameterNames();
         while (parameters.hasMoreElements())
         {
