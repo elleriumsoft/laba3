@@ -20,7 +20,7 @@
 <%
     if (request.getParameter("id") == null)
     {
-        response.sendRedirect("/laba3/Servlets.PrintStructure");
+        response.sendRedirect("/laba3/PrintStructure.jsp");
     }
 
     if (request.getParameter("command") != null && request.getParameter("command").equals("delete"))
@@ -43,9 +43,9 @@
     session.setAttribute("iddept", request.getParameter("id"));
 %>
 
-<h1 style="color:#191970"><b><%=StructureProcessing.loadStructure(request).getDeptName(Integer.valueOf(request.getParameter("id")))%></b></h1>
+<h1 style="color:#191970"><b><%=StructureProcessing.loadStructure(request).getDeptName(request.getParameter("id"))%></b></h1>
 
-<input type="submit" id="Button1" onclick="window.location.href='/laba3/Servlets.PrintStructure';return false;" name="" value="Вернуться к структуре" style="position:absolute;left:8px;top:50px;width:184px;height:25px;z-index:0;">
+<input type="submit" id="Button1" onclick="window.location.href='/laba3/PrintStructure.jsp';return false;" name="" value="Вернуться к структуре" style="position:absolute;left:8px;top:50px;width:184px;height:25px;z-index:0;">
 <br>
 <h2 style="color:#191970"><b>Сотрудники</b></h2>
 <%

@@ -1,5 +1,6 @@
 package Data;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +33,11 @@ public class Structure
         initElement(level, parentId);
     }
 
+    /**
+     * Рекурсивное добавление элементов дерева в лист с указанием уровня
+     * @param level - уровень погружения
+     * @param parentId - предок
+     */
     private void initElement(int level, int parentId)
     {
         StructureElement el;
@@ -57,6 +63,7 @@ public class Structure
      */
     public String printStructure(String command)
     {
+        if (command == null){command = "";}
         StringBuilder pw = new StringBuilder("");
         for (StructureElement el : structure)
         {
@@ -67,7 +74,7 @@ public class Structure
                 pw.append("&nbsp<span><a href=\"/laba3/PrintElementJsp.jsp?id=" + String.valueOf(el.getId()) + "\">" + el.getNameDepartment() + "</a>&nbsp");//pw.append("&nbsp<span><a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(el.getId()) + "\">" + el.getNameDepartment() + "</a>&nbsp");
                 if (!command.equals("") && !(command.equals("delete") && el.getId() == 1))
                 {
-                    pw.append("<a href=\"/laba3/Servlets.PrintStructure?command=" + command + "&element=" + el.getId() + "\"style=\"color:#FF0000\">[" + getStringCommand(command) + "]</a>");
+                    pw.append("<a href=\"/laba3/PrintStructure.jsp?command=" + command + "&element=" + el.getId() + "\"style=\"color:#FF0000\">[" + getStringCommand(command) + "]</a>");
                 }
                 pw.append("</span><br><br>");
             }
@@ -104,10 +111,10 @@ public class Structure
         {
             if (isOpen)
             {
-                return "<a href=\"/laba3/Servlets.PrintStructure?close=" + String.valueOf(id) + "\"><img src=\"images/minus.png\" width=\"14\" height=\"14\" align = \"bottom\" alt=\"Раскрыть список\"</a>";
+                return "<a href=\"/laba3/PrintStructure.jsp?close=" + String.valueOf(id) + "\"><img src=\"images/minus.png\" width=\"14\" height=\"14\" align = \"bottom\" alt=\"Раскрыть список\"</a>";
             } else
             {
-                return "<a href=\"/laba3/Servlets.PrintStructure?open=" + String.valueOf(id) + "\"><img src=\"images/plus.png\" width=\"14\" height=\"14\" align = \"bottom\" alt=\"Раскрыть список\"</a>";
+                return "<a href=\"/laba3/PrintStructure.jsp?open=" + String.valueOf(id) + "\"><img src=\"images/plus.png\" width=\"14\" height=\"14\" align = \"bottom\" alt=\"Раскрыть список\"</a>";
             }
         }
         else
@@ -149,8 +156,17 @@ public class Structure
         this.openElements = openElements;
     }
 
-    public String getDeptName(int id)
+    public String getDeptName(String stringId)
     {
+        int id;
+        try
+        {
+            id = Integer.valueOf(stringId);
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
         for (StructureElement element: structure)
         {
             if (element.getId() == id)
@@ -160,36 +176,6 @@ public class Structure
         }
         return "";
     }
-
-//    public static String printStructure(String command)
-//    {
-//        int level = 1;
-//        int parentId = 0;
-//        StringBuilder outString = new StringBuilder("<div id=\"multi-derevo\"><ul>");
-//        printElement(level, parentId, outString, command);
-//        return outString.toString();
-//    }
-//
-//    private static void printElement(int level, int parentId, StringBuilder pw, String command)
-//    {
-//        StructureElement el;
-//        for (int i = 0; i < Structure.getStructure().size(); i++)
-//        {
-//            el = Structure.getStructure().get(i);
-//            pw.append("<ul>");
-//            if (el.getParent_id() == parentId)
-//            {
-//                pw.append("<li><span><a href=\"/laba3/Servlets.PrintElement?id=" + String.valueOf(el.getId()) + "\">" + el.getNameDepartment() + "</a>&nbsp");
-//                if (!command.equals(""))
-//                {
-//                    pw.append("<a href=\"/laba3/Servlets.PrintStructure?command=" + command + "&element=" + el.getId() + "\"style=\"color:#FF0000\">["+ getStringCommand(command) + "]</a>");
-//                }
-//                pw.append( "</span></li>" + "<br>");
-//                printElement(level+1, el.getId(), pw, command);
-//            }
-//            pw.append("</ul>");
-//        }
-//    }
 
     private String getStringCommand(String command)
     {
@@ -210,5 +196,60 @@ public class Structure
             return "";
         }
     }
+
+    public void verifyForOpenList(HttpServletRequest req)
+    {
+        if (req.getParameter("open") != null)
+        {
+            if (req.getParameter("open").equals("all"))
+            {
+                getOpenElements().clear();
+                for (StructureElement element : structure)
+                {
+                    if (elementHasChild(element.getId()))
+                    {
+                        getOpenElements().add(element.getId());
+                    }
+                }
+            }
+            else
+            {
+                getOpenElements().add((Integer.valueOf(req.getParameter("open"))));
+            }
+        }
+        if (req.getParameter("close") != null)
+        {
+            if (req.getParameter("close").equals("all"))
+            {
+                removeFromOpen(1);
+            }
+            else
+            {
+                removeFromOpen(Integer.valueOf(req.getParameter("close")));
+            }
+        }
+    }
+
+    private void removeFromOpen(int id)
+    {
+        for (int i = 0; i< getOpenElements().size(); i++)
+        {
+
+            if (getOpenElements().get(i) == id)
+            {
+                getOpenElements().remove(i);
+
+                for (int j = 0; j < getStructure().size(); j++)
+                {
+                    if (structure.get(j).getParent_id() == id)
+                    {
+                        removeFromOpen(structure.get(j).getId());
+                    }
+                }
+                break;
+            }
+        }
+    }
+
 
 }

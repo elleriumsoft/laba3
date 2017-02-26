@@ -3,6 +3,8 @@ package view.finder;
 import Data.Employee;
 import RequestsToDatabase.ConnectionToDb;
 import jdbc.ConnectionHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,10 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import static view.finder.Constants.*;
+import static view.finder.Constants.END_DATE;
+import static view.finder.Constants.START_DATE;
 
 public class ByDateCommand implements Command, ConnectionHandler
 {

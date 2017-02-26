@@ -42,7 +42,7 @@ public class EditBoxesForStructure extends HttpServlet
                 new ConnectionToDb().connectToDb(new EditElement(req.getParameter("EditEdit"), idForAction));
 
             }
-            resp.sendRedirect("/laba3/Servlets.PrintStructure?renew=1");
+            resp.sendRedirect("/laba3/PrintStructure.jsp?renew=1");
         }
     }
 
