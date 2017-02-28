@@ -3,8 +3,6 @@ package view.finder;
 import Data.Employee;
 import RequestsToDatabase.ConnectionToDb;
 import jdbc.ConnectionHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +15,6 @@ import static view.finder.Constants.START_DATE;
 
 public class ByDateCommand implements Command, ConnectionHandler
 {
-    private static final Logger logger = LogManager.getLogger(ByDateCommand.class);
     private String startDate;
     private String endDate;
 
@@ -32,8 +29,6 @@ public class ByDateCommand implements Command, ConnectionHandler
     @Override
     public Object onConnection(Connection connection) throws SQLException
     {
-        logger.error("Logging is indispensable for debugging");
-
         PreparedStatement statement = connection.prepareStatement(
             "select employee.id as id, employee.name as name, employee.date as date, occupations.occupation as occ, structure.dept as dept, structure.id as iddept" +
                 " from employee, occupations, structure" +
