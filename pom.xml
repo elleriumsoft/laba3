@@ -6,7 +6,7 @@
 <version>1.0</version>
 <packaging>war</packaging>
 <name>laba3 Maven Webapp</name>
-<description>Laba3</description>
+<description>Проект с JSP для работы с иерархической базой данных</description>
 <url>http://wildfly.org</url>
 
 <properties>
